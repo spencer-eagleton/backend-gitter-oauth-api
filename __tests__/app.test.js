@@ -52,10 +52,27 @@ describe('backend-gitter-oauth-api routes', () => {
     let res = await agent.get('/api/v1/posts');
     expect(res.status).toEqual(401);
 
-    await agent
-      .get('/api/v1/github/login/callback?code=42');
+    await agent.get('/api/v1/github/login/callback?code=42');
 
     res = await agent.get('/api/v1/posts');
     expect(res.status).toEqual(200);
+  });
+
+  it('should allow a logged in user to create a post', async () => {
+    const agent = request.agent(app);
+
+    await agent.get('/api/v1/github/login/callback?code=42');
+
+
+    const res = await agent.post('/api/v1/posts').send({
+      
+      body: 'The greatest post of all',
+      userId: '1'
+    });
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      body: 'The greatest post of all',
+      userId: '1'
+    });
   });
 });
