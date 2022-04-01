@@ -66,12 +66,12 @@ describe('backend-gitter-oauth-api routes', () => {
 
     const res = await agent.post('/api/v1/posts').send({
       
-      body: 'The greatest post of all',
+      body: 'The greatest post of all!',
       userId: '1'
     });
     expect(res.body).toEqual({
       id: expect.any(String),
-      body: 'The greatest post of all',
+      body: 'The greatest post of all!',
       userId: '1'
     });
   });
