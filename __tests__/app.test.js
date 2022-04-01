@@ -2,9 +2,9 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
+const GithubUser = require('../lib/models/GithubUser');
 
 jest.mock('../lib/utils/github');
-
 
 describe('backend-gitter-oauth-api routes', () => {
   beforeEach(() => {
@@ -23,7 +23,6 @@ describe('backend-gitter-oauth-api routes', () => {
     );
   });
 
-
   it('should login and redirect users to /api/v1/github/', async () => {
     const res = await request
       .agent(app)
@@ -31,5 +30,19 @@ describe('backend-gitter-oauth-api routes', () => {
       .redirects(1);
 
     expect(res.req.path).toEqual('/api/v1/posts');
+  });
+
+  it('deletes a user session', async () => {
+    const agent = request.agent(app);
+
+    const login = await agent
+      .get('/api/v1/github/login/callback?code=42')
+      .redirects(1);
+
+    expect(login.req.path).toEqual('/api/v1/posts');
+
+    const logout = await agent.delete('/api/v1/github/logout');
+
+    expect(logout.body).toEqual({ message: 'you have been logged out' });
   });
 });
