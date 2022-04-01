@@ -32,17 +32,17 @@ describe('backend-gitter-oauth-api routes', () => {
     expect(res.req.path).toEqual('/api/v1/posts');
   });
 
-  it('deletes a user session', async () => {
+  it('logs out a user', async () => {
     const agent = request.agent(app);
 
-    const login = await agent
+    const res = await agent
       .get('/api/v1/github/login/callback?code=42')
       .redirects(1);
 
-    expect(login.req.path).toEqual('/api/v1/posts');
+    expect(res.req.path).toEqual('/api/v1/posts');
 
-    const logout = await agent.delete('/api/v1/github/logout');
+    const expected = await agent.delete('/api/v1/github/logout');
 
-    expect(logout.body).toEqual({ message: 'you have been logged out' });
+    expect(expected.body).toEqual({ message: 'you have been logged out' });
   });
 });
