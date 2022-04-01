@@ -45,4 +45,17 @@ describe('backend-gitter-oauth-api routes', () => {
 
     expect(expected.body).toEqual({ message: 'you have been logged out' });
   });
+
+  it('allows the logged in user to view list of posts', async () => {
+    const agent = request.agent(app);
+
+    let res = await agent.get('/api/v1/posts');
+    expect(res.status).toEqual(401);
+
+    await agent
+      .get('/api/v1/github/login/callback?code=42');
+
+    res = await agent.get('/api/v1/posts');
+    expect(res.status).toEqual(200);
+  });
 });
