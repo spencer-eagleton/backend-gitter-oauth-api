@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS posts;
 CREATE TABLE posts (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     body TEXT NOT NULL,
-    user_id BIGINT REFERENCES users(id)
+    user_id BIGINT REFERENCES github_users(id)
 );
 
 INSERT INTO posts (body)
