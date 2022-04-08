@@ -63,16 +63,23 @@ describe('backend-gitter-oauth-api routes', () => {
 
     await agent.get('/api/v1/github/login/callback?code=42');
 
-
     const res = await agent.post('/api/v1/posts').send({
-      
       body: 'The greatest post of all!',
-      userId: '1'
+      userId: '1',
     });
     expect(res.body).toEqual({
       id: expect.any(String),
       body: 'The greatest post of all!',
-      userId: '1'
+      userId: '1',
     });
+  });
+
+  it('allows user to view list of quotes', async () => {
+    const res = await request(app).get('/api/v1/quotes');
+    expect(res.body).toEqual([
+      { author: expect.any(String), content: expect.any(String) },
+      { author: expect.any(String), content: expect.any(String) },
+      { author: expect.any(String), content: expect.any(String) },
+    ]);
   });
 });
