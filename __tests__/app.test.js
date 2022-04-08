@@ -70,7 +70,7 @@ describe('backend-gitter-oauth-api routes', () => {
     expect(res.body).toEqual({
       id: expect.any(String),
       body: 'The greatest post of all!',
-      userId: '1',
+      userId: expect.any(String),
     });
   });
 
